@@ -1,0 +1,140 @@
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*.py[cod].bak
+__pycache__/
+*.so
+
+# C extensions
+*.pyd
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.virtualenv/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.coverage.e
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Flask stuff
+instance/
+.webassets-cache
+
+# Scrapy stuff
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.env.*
+.venv
+venv/
+ENV/
+
+
+# pytype
+.pytype/
+
+# profiling data
+.prof
+
+# Cython debug symbols
+cython_debug/
+
+# Project specific
+node_modules
+client/build/
+client/.env
+client/.env.*
+client/coverage/
+client/.cache
+client/.next/
+client/out/
+client/dist/
+client/.vuepress/dist/
+client/public/
+client/static/
+client/.nuxt/
+client/.vercel/
+client/.hugo_build.lock
+client/.docusaurus/
+
+
+# Dependencies
+client/node_modules/
+client/pnpm-lock.yaml
+client/yarn.lock
+client/package-lock.json
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Static files
+staticfiles/
+client/static/
+public/static/
+
+# Misc
+*.sass-cache
+*.tgz
+*.tmp
+
+# Coverage directory used by tools like istanbul
+coverage/
