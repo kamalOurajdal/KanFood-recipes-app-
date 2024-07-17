@@ -1,7 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {Recipe} from "../models/recipe";
+import {Subscription} from "rxjs";
+import {fetchCategories, fetchRecipes} from "../services/fetchRecipes";
+import {Category} from "../models/category";
+import {useNavigate} from "react-router-dom";
 
 const SampleNextArrow = (props: any) => {
     const { onClick } = props;
@@ -25,7 +30,7 @@ const SamplePrevArrow = (props: any) => {
     );
 };
 
-function ExploreRecipes(props: any) {
+function ExploreCategories(props: any) {
     const settings = {
         dots: true,
         infinite: true,
@@ -65,59 +70,48 @@ function ExploreRecipes(props: any) {
         ],
     };
 
-    const Sdata = [
-        {
-            id: 1,
-            title: "Sandwich",
-            img: require("../assets/images/sandwich.png"),
-        },
-        {
-            id: 2,
-            title: "Salad",
-            img: require("../assets/images/salad.png"),
-        },
-        {
-            id: 3,
-            title: "Desert",
-            img: require("../assets/images/desert.png"),
-        },
-        {
-            id: 4,
-            title: "Cake",
-            img: require("../assets/images/cake.png"),
-        },
-        {
-            id: 5,
-            title: "Roll",
-            img: require("../assets/images/roll.png"),
-        },
-        {
-            id: 6,
-            title: "Noodles",
-            img: require("../assets/images/noodels.png"),
-        },
-    ];
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [error, setError] = useState<Error | null>(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const subscription: Subscription = fetchCategories().subscribe({
+            next: data => {
+                setCategories(data)
+            },
+            error: err => setError(err),
+        });
+        return () => subscription.unsubscribe();
+    }, []);
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+    const handleCategoryClick = (categoryId: string) => {
+        navigate(`categories/${categoryId}/recipes/`);
+    };
 
     return (
         <div className="mt-8 sm:px-6 lg:px-8">
-            <h1 className="font-bold text-2xl sm:text-3xl mb-2">Explore Our Recipes</h1>
-            <p className="text-gray-600 text-sm sm:text-base mb-6">
+            <h1 className="font-bold text-2xl sm:text-3xl mb-2 text-center md:text-left">Explore Our Categories</h1>
+            <p className="text-gray-600 text-sm sm:text-base mb-6 text-center md:text-left">
                 Discover a world of flavors with our curated selection of recipes.
                 From quick snacks to gourmet meals, find inspiration for every occasion
                 and elevate your culinary skills with step-by-step guides.
             </p>
             <div className="relative px-4">
                 <Slider {...settings} className="mx-auto max-w-7xl">
-                    {Sdata.map((component, index) => (
+                    {categories.map((category, index) => (
                         <div key={index} className="group p-2 sm:p-4 flex flex-col items-center text-center">
-                            <div className="w-full aspect-square overflow-hidden rounded-md">
+                            <div onClick={()=>handleCategoryClick(category.id)} className="w-full aspect-square overflow-hidden rounded-md">
                                 <img
-                                    src={component.img}
-                                    alt={component.title}
+                                    src={category.image}
+                                    alt={category.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transform duration-300 ease-in-out cursor-pointer"
                                 />
                             </div>
-                            <h2 className="mt-2 text-gray-600 text-sm sm:text-base">{component.title}</h2>
+                            <h2 className="mt-2 text-gray-600 text-sm sm:text-base">{category.name}</h2>
                         </div>
                     ))}
                 </Slider>
@@ -126,4 +120,4 @@ function ExploreRecipes(props: any) {
     );
 }
 
-export default ExploreRecipes;
+export default ExploreCategories;

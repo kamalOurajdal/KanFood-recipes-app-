@@ -1,15 +1,48 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import homeHero from '../assets/images/home-hero.jpg';
+import {Recipe} from "../models/recipe";
+import {from, switchMap} from "rxjs";
+import {searchRecipes} from "../services/fetchRecipes";
+import {useNavigate} from "react-router-dom";
 
 function HeroHome(props: any) {
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState<Recipe[]>([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const navigate = useNavigate() ;
 
+    useEffect(() => {
+        const subscription = from([searchTerm])
+            .pipe(// wait for the user to stop typing for 300ms
+                switchMap((term) => {
+                    if (term.length > 2) {
+                        return searchRecipes(term);
+                    } else {
+                        return from(Promise.resolve([]));
+                    }
+                })
+            )
+            .subscribe(
+                (results) => {
+                    setSearchResults(results);
+                    setIsDropdownOpen(searchTerm.length > 2);
+                },
+                (error) => {
+                    console.error('Error fetching search results:', error);
+                }
+            );
+
+        return () => subscription.unsubscribe();
+    }, [searchTerm]);
     const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
         setIsDropdownOpen(value.length > 2);
     };
+
+    const handleRecipeClick = (id: string) => {
+        navigate(`/recipe/${id}`);
+    }
 
     return (
         <div>
@@ -21,7 +54,7 @@ function HeroHome(props: any) {
                 />
                 <div className="bg-black/30 absolute inset-0 flex flex-col justify-center items-center p-4 sm:p-8">
                     <div className="max-w-3xl mx-auto">
-                        <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-bold text-center mb-4 sm:mb-8 leading-tight sm:leading-[1.2]">
+                        <h1 className="text-white text-4xl md:text-5xl font-bold text-center mb-4 sm:mb-8 leading-tight sm:leading-[1.2]">
                             Fresh ingredients,<br className="hidden sm:inline" /> endless possibilities.
                         </h1>
                         <p className="text-sm sm:text-base text-gray-50 text-center max-w-xl mx-auto">
@@ -49,17 +82,23 @@ function HeroHome(props: any) {
                                     isDropdownOpen ? "block" : "hidden"
                                 }`}
                             >
-                                <ul>
-                                    <li className="p-2 cursor-pointer hover:bg-orange-50 text-sm sm:text-base">Breakfast</li>
-                                    <li className="p-2 cursor-pointer hover:bg-orange-50 text-sm sm:text-base">Lunch</li>
-                                    <li className="p-2 cursor-pointer hover:bg-orange-50 text-sm sm:text-base">Dinner</li>
-                                    <li className="p-2 cursor-pointer hover:bg-orange-50 text-sm sm:text-base">Drinks</li>
+                                <ul className={"max-h-60 overflow-y-auto"}>
+                                    {searchResults && searchResults.map((recipe) => (
+                                        <li onClick={() => handleRecipeClick(recipe.id)} key={recipe.id} className="p-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2">
+                                            <img src={recipe.image} alt="" className={"size-14 object-cover rounded-md"}/>
+                                            <div>
+                                                <h1 className={""}>{recipe.title}</h1>
+                                                <span className={"text-xs text-gray-400"}>{recipe.description}</span>
+                                            </div>
+                                        </li>
+                                    ))}
+                                {/*    if there is no result*/}
+                                    {searchResults.length === 0 && (
+                                        <li className="p-2 text-gray-400">No Recipes found</li>
+                                    )}
                                 </ul>
                             </div>
                         </div>
-                        <button className="bg-orange-500 text-white p-3 sm:p-4 rounded-md text-sm sm:text-base w-full sm:w-auto">
-                            Explore recipes
-                        </button>
                     </div>
                 </div>
             </div>

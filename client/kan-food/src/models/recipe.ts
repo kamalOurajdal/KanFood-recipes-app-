@@ -1,3 +1,6 @@
+import categoryRecipes from "../pages/CategoryRecipes";
+import {Category} from "./category";
+
 export interface NutritionInfo {
     name: string;
     value: number;
@@ -5,14 +8,19 @@ export interface NutritionInfo {
 }
 
 export interface Recipe {
-    id: number;
+    id: string;
     title: string;
     image: string;
+    price: number;
     description: string;
-    prepTime: number;
-    cookTime: number;
-    servings: number;
+    categories: Category[];
     ingredients: string[];
     instructions: string[];
-    nutritionInfo: NutritionInfo[];
+    cooking_time: number;
+    servings: number;
+    created_at: string;
+    updated_at: string;
+    author: number;
+    is_featured: boolean;
+    nutrition: NutritionInfo[];
 }

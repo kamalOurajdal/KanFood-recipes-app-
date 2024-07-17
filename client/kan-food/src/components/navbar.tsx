@@ -31,7 +31,7 @@ const Navbar = () => {
 
     return (
 
-        <nav className="bg-white relative z-50">
+        <nav className="bg-white relative z-50 border-b">
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     <div className="flex-shrink-0">

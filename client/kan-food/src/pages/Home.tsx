@@ -1,15 +1,14 @@
 import React from 'react';
 import HeroHome from "../components/Hero-home";
-import ExploreRecipes from "../components/Explore-recipes";
-import ListRecipes from "../components/List-recipes";
-import RecipeDetails from "./Recipe-details";
+import ExploreCategories from "../components/ExploreCategories";
+import PopularRecipes from "../components/PopularRecipes";
 
-function Home(props:any) {
+function Home() {
     return (
         <>
             <HeroHome/>
-            <ExploreRecipes/>
-            <ListRecipes/>
+            <ExploreCategories/>
+            <PopularRecipes/>
         </>
     );
 }
