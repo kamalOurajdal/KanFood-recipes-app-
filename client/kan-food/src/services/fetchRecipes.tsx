@@ -3,7 +3,7 @@ import { map, catchError } from 'rxjs/operators';
 import axios from 'axios';
 import {Recipe} from "../models/recipe";
 
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'http://16.171.3.216';
 
 export const fetchRecipes = (pageSize:number) => {
     const url = `${BASE_URL}/recipes/?page=${pageSize}`;

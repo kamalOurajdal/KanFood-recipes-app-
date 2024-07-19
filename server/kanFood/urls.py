@@ -31,12 +31,10 @@ urlpatterns = [
     path('recipes/<int:recipe_id>/nutrition/', get_nutrition_of_recipe, name='get-nutrition-of-recipe'),
     path('recipes', search_recipes, name='get-nutrition-of-recipe'),
 
-
-
     path('categories/<int:category_id>/recipes/', get_recipes_by_category, name='get-recipes-by-category'),
     path('categories/', CategoryListCreate.as_view(), name='category-list-create'),
     path('nutrition/', NutritionListCreate.as_view(), name='nutrition-list-create'),
-    path('saved_recipes/', SavedRecipeListCreate.as_view(), name='savedrecipe-list-create'),
+    path('saved_recipes/', SavedRecipeListCreate.as_view(), name='saved recipe-list-create'),
     path('admin/', admin.site.urls),
 ]
 

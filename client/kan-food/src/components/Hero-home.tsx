@@ -4,6 +4,8 @@ import {Recipe} from "../models/recipe";
 import {from, switchMap} from "rxjs";
 import {searchRecipes} from "../services/fetchRecipes";
 import {useNavigate} from "react-router-dom";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 function HeroHome(props: any) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -13,7 +15,7 @@ function HeroHome(props: any) {
 
     useEffect(() => {
         const subscription = from([searchTerm])
-            .pipe(// wait for the user to stop typing for 300ms
+            .pipe(
                 switchMap((term) => {
                     if (term.length > 2) {
                         return searchRecipes(term);
@@ -22,18 +24,19 @@ function HeroHome(props: any) {
                     }
                 })
             )
-            .subscribe(
-                (results) => {
-                    setSearchResults(results);
-                    setIsDropdownOpen(searchTerm.length > 2);
-                },
-                (error) => {
-                    console.error('Error fetching search results:', error);
+            .subscribe({
+                    next: (results) => {
+                        setSearchResults(results);
+                        setIsDropdownOpen(searchTerm.length > 2);
+                    },
+                    error: (error) => {
+                        console.error('Error fetching search results:', error);
+                    }
                 }
             );
-
         return () => subscription.unsubscribe();
     }, [searchTerm]);
+
     const handleSearchTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);

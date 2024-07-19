@@ -22,6 +22,7 @@ class RecipePagination(PageNumberPagination):
     page_size = 10  # default page size
     max_page_size = 100
 
+
 class RecipeListCreate(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
@@ -73,9 +74,7 @@ def get_recipes_by_category(request, category_id):
 @api_view(['GET'])
 def search_recipes(request):
     query = request.GET.get('q', '')
-    print(query)
     if query:
-
         recipes = Recipe.objects.filter(title__icontains=query)
         serializer = RecipeSerializer(recipes, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
